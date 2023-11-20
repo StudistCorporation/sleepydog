@@ -1,9 +1,9 @@
-name: lint
+name: reflection
 
 on: push
 
 jobs:
-  lint:
+  reflection:
     runs-on: ubuntu-latest
 
     steps:
