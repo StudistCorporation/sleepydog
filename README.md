@@ -39,3 +39,22 @@ Utility function that builds Datadog headers for distributed tracing. By adding 
 ;; (:require [sleepy.dog :as datadog])
 (merge (datadog/http-headers) headers)
 ```
+
+### `report-error!`
+
+Used to manually report caught exceptions (without relying on the automatic reporting from `with-tracing` or `defn-traced`). This can be useful for example in a Ring handler that catches all escaped exceptions are responds with a well-formed 500 error.
+
+```clj
+(defn wrap-exception
+  [handler]
+  (fn exception-catcher
+    [request]
+    (try
+      (handler request)
+      (catch Throwable ex
+        (let [span (datadog/active-span!)]
+          (datadog/report-error! span ex)
+          (when-let [root (datadog/root-of span)]
+            (datadog/report-error! root ex)))
+        {:status 500 :body (.getMessage ex)}))))
+```
