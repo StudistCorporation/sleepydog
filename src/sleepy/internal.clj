@@ -1,5 +1,4 @@
-(ns mani.internal
-  (:require [manifold.deferred :as async])
+(ns sleepy.internal
   (:import [datadog.trace.api
             DDTags]
            [datadog.trace.api.interceptor
