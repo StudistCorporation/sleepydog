@@ -10,11 +10,12 @@
 (deftest defn-traced-test
   (testing "macro expansion"
     (let [expected
-          (list `defn 'foo
-                []
+          (list
+           `defn 'foo
+           []
              ;; tests seem to count as if executed in user ns...
-                (list `with-tracing "user/foo"
-                      true))
+           (list `with-tracing "user/foo"
+                 true))
           actual
           (macroexpand-1 '(sleepy.dog/defn-traced foo [] true))]
       (is (= expected actual)))
