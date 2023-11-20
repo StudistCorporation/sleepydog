@@ -1,6 +1,5 @@
 (ns mani.dog
-  (:require [manifold.deferred :as async]
-            [mani.internal :as datadog :refer [*continuation*]])
+  (:require [mani.internal :as datadog :refer [*continuation*]])
   (:import [datadog.trace.api
             DDTags]
            [io.opentracing.util
@@ -33,14 +32,16 @@
      (try
        (let [result# (binding [*continuation* (datadog/capture-scope scope#)]
                        ~@body)]
-         (if (async/deferrable? result#)
-           (-> result#
-               (async/catch report!#)
-               (async/finally
-                 (fn ~'async-close []
-                   (.finish span#)
-                   (.close scope#)
-                   (when inherited-scope# (.close inherited-scope#)))))
+         (if (future? result#)
+           (future
+             (try
+               @result#
+               (catch Throwable ex#
+                 (report!# ex#))
+               (finally
+                 (.finish span#)
+                 (.close scope#)
+                 (when inherited-scope# (.close inherited-scope#)))))
            result#))
        (catch Throwable ex#
          (report!# ex#))
