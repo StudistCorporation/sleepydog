@@ -15,4 +15,9 @@ jobs:
           lein: 2.10.0
 
       - name: Run check
-        run: lein check
+        run: |
+          result=$(lein check 2> >(grep --line-buffered -P 'Reflection warning, sleepy'))
+          if [[ $result ]]; then
+            echo "$result"
+            exit 1
+          fi
