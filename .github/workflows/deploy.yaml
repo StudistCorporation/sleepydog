@@ -1,0 +1,28 @@
+name: Release automation
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  clojars:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+      - uses: delaguardo/setup-clojure@12.1
+        with:
+          lein: 2.10.0
+      - run: lein deploy clojars
+        env:
+          CLOJARS_USER: valerauko
+          CLOJARS_TOKEN: ${{ secrets.CLOJARS_TOKEN }}
