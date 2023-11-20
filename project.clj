@@ -4,4 +4,7 @@
   :license {:name "MIT"
             :url "https://opensource.org/license/mit/"}
   :dependencies [[org.clojure/clojure "1.11.1"]]
+  :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
+                                   :username :env/clojars_user
+                                   :password :env/clojars_token}}
   :repl-options {:init-ns jp.studist.sleepydog})
