@@ -9,7 +9,10 @@
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
   :profiles
-  {:dev {:dependencies [[clj-kondo "2023.10.20"]]
+  {:dev {:dependencies [[clj-kondo "2023.10.20"]
+                        [lambdaisland/kaocha "1.85.1342"]]
          :aliases {"lint" ["run" "-m" "clj-kondo.main"
                            "--config" ".clj-kondo/config.edn"
-                           "--lint" "src" "test"]}}})
+                           "--lint" "src" "test"]
+                   "test" ["run" "-m" "kaocha.runner"]}}
+   :agent {:jvm-opts ["-javaagent:./dd-java-agent.jar"]}})

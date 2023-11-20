@@ -1,6 +1,6 @@
 # Sleepy Dog
 
-[![Clojars Project](https://img.shields.io/clojars/v/jp.studist/sleepydog.svg)](https://clojars.org/jp.studist/sleepydog)
+[![Build Status](https://github.com/studistcorporation/sleepydog/actions/workflows/test.yaml/badge.svg?event=push)](https://github.com/studistcorporation/sleepydog/actions) [![Clojars Project](https://img.shields.io/clojars/v/jp.studist/sleepydog.svg)](https://clojars.org/jp.studist/sleepydog)
 
 Clojure library for tracing (possibly async) applications with Datadog.
 
