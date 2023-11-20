@@ -4,7 +4,7 @@
   :license {:name "MIT"
             :url "https://opensource.org/license/mit/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
-                 [com.datadoghq/dd-trace-ot "1.17.0"]]
+                 [com.datadoghq/dd-trace-ot "1.24.2"]]
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
