@@ -1,5 +1,5 @@
-(ns mani.dog
-  (:require [mani.internal :as datadog :refer [*continuation*]])
+(ns sleepy.dog
+  (:require [sleepy.internal :as datadog :refer [*continuation*]])
   (:import [datadog.trace.api
             DDTags]
            [io.opentracing.util
