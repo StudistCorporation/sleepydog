@@ -1,4 +1,4 @@
-(defproject jp.studist/sleepydog "0.1.0-alpha4"
+(defproject jp.studist/sleepydog "0.1.0"
   :description "FIXME: write description"
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"

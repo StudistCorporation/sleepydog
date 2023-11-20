@@ -4,6 +4,14 @@
 
 Clojure library for tracing (possibly async) applications with Datadog.
 
+## Installation
+
+Available on Clojars.
+
+```
+[jp.studist/sleepydog "0.1.0"]
+```
+
 ## Usage
 
 The public API is in the `sleepy.dog` namespace.
