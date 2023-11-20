@@ -52,6 +52,8 @@ Utility function that builds Datadog headers for distributed tracing. By adding 
 
 Used to manually report caught exceptions (without relying on the automatic reporting from `with-tracing` or `defn-traced`). This can be useful for example in a Ring handler that catches all escaped exceptions are responds with a well-formed 500 error.
 
+If you want to mark an entire request as "errored", then combine this with `root-of` to mark the root span as error.
+
 ```clj
 (defn wrap-exception
   [handler]
