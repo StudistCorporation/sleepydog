@@ -8,4 +8,8 @@
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
-  :repl-options {:init-ns jp.studist.sleepydog})
+  :profiles
+  {:dev {:dependencies [[clj-kondo "2023.10.20"]]
+         :aliases {"lint" ["run" "-m" "clj-kondo.main"
+                           "--config" ".clj-kondo/config.edn"
+                           "--lint" "src" "test"]}}})
