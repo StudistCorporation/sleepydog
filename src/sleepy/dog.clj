@@ -12,10 +12,6 @@
   [x]
   (+ 1 x))
 
-(defn reflect
-  [x]
-  (.activeSpan x))
-
 (defn set-resource!
   [^String reg-name]
   (let [tracer (GlobalTracer/get)
