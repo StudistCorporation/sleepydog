@@ -14,11 +14,6 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      - uses: actions/setup-java@v3
-        with:
-          java-version: 21
-          distribution: temurin
-          cache: maven
       - uses: delaguardo/setup-clojure@12.1
         with:
           lein: 2.10.0
