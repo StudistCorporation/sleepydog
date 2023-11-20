@@ -1,4 +1,4 @@
-(ns mani.dog-test
+(ns sleepy.dog-test
   (:require [clojure.test :refer :all]
             [jp.studist.manidog :refer :all]))
 
