@@ -8,17 +8,21 @@
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
+(defn active-span!
+  []
+  (let [tracer (GlobalTracer/get)]
+    (when *continuation* (.activate *continuation*))
+    (.activeSpan tracer)))
+
 (defn set-resource!
   [^String reg-name]
-  (let [tracer (GlobalTracer/get)
-        span (.activeSpan tracer)]
+  (let [span (active-span!)]
     (datadog/tag-span! span DDTags/RESOURCE_NAME reg-name)))
 
 (defn http-headers
   []
-  (let [tracer (GlobalTracer/get)]
-    (when-let [span (.activeSpan tracer)]
-      (datadog/build-headers span))))
+  (let [span (active-span!)]
+    (datadog/build-headers span)))
 
 (defmacro with-tracing
   [op & body]
@@ -57,8 +61,7 @@
       {:strs [content-length user-agent x-forwarded-for]} :headers
       :as request}]
     (with-tracing "ring.request"
-      (let [tracer (GlobalTracer/get)
-            span (.activeSpan tracer)]
+      (let [span (active-span!)]
         ;; https://docs.datadoghq.com/tracing/trace_collection/tracing_naming_convention/#http-requests
         (datadog/tag-span! span "http.method" (name request-method))
         (datadog/tag-span! span "http.url" uri)
