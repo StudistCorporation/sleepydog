@@ -16,7 +16,7 @@ jobs:
 
       - name: Run check
         run: |
-          result=$(lein check 2> >(grep --line-buffered -P 'Reflection warning, sleepy'))
+          result=$(lein check 2> >(grep --line-buffered -P 'warning, sleepy'))
           if [[ $result ]]; then
             echo "$result"
             exit 1
