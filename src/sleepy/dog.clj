@@ -8,10 +8,6 @@
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
-(defn box
-  [x]
-  (+ 1 x))
-
 (defn set-resource!
   [^String reg-name]
   (let [tracer (GlobalTracer/get)
