@@ -1,0 +1,23 @@
+name: reflection
+
+on: push
+
+jobs:
+  reflection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: delaguardo/setup-clojure@12.1
+        with:
+          lein: 2.10.0
+
+      - name: Run check
+        run: |
+          result=$(lein check 2> >(grep --line-buffered -P 'warning, sleepy'))
+          if [[ $result ]]; then
+            echo "$result"
+            exit 1
+          fi
