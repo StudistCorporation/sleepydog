@@ -61,9 +61,7 @@
    [span ex]
    (.setError span true)
    ;; MutableSpanで拾ってるが、OpenTracingのSpanのinterfaceも実装していてそっちのlogを使う
-   (.log ^io.opentracing.Span span (Collections/singletonMap Fields/ERROR_OBJECT ex))
-   (when-let [root (.getLocalRootSpan span)]
-     (.setError root true)))
+   (.log ^io.opentracing.Span span (Collections/singletonMap Fields/ERROR_OBJECT ex)))
 
   NoopSpan
   (tag-span!
