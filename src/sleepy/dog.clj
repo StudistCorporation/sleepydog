@@ -8,16 +8,23 @@
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
+;; just aliases
+
 (defn active-span!
   []
-  (let [tracer (GlobalTracer/get)]
-    (when *continuation* (.activate *continuation*))
-    (.activeSpan tracer)))
+  (datadog/active-span!))
 
 (defn set-resource!
-  [^String reg-name]
-  (let [span (active-span!)]
-    (datadog/tag-span! span DDTags/RESOURCE_NAME reg-name)))
+  [reg-name]
+  (datadog/set-resource! reg-name))
+
+(defn report-error!
+  [span ex]
+  (datadog/report-error! span ex))
+
+(defn root-of
+  [span]
+  (datadog/root-of span))
 
 (defn http-headers
   []

@@ -47,9 +47,16 @@
   (add-tag!
    [_ _ _]))
 
+(defn active-span!
+  []
+  (let [tracer (GlobalTracer/get)]
+    (when *continuation* (.activate *continuation*))
+    (.activeSpan tracer)))
+
 ;; agentが無効だとNoopSpanになるので何もしない実装も準備
 (defprotocol Span
   (tag-span! [span k v])
+  (root-of [span])
   (report-error! [span ex]))
 
 (extend-protocol Span
@@ -57,6 +64,9 @@
   (tag-span!
    [span k v]
    (add-tag! v span k))
+  (root-of
+   [span]
+   (.getLocalRootSpan span))
   (report-error!
    [span ex]
    (.setError span true)
@@ -66,6 +76,8 @@
   NoopSpan
   (tag-span!
    [_ _ _])
+  (root-of
+   [_])
   (report-error!
    [_ _]))
 
