@@ -1,0 +1,1 @@
+{:lint-as {sleepy.dog/defn-traced clojure.core/defn}}
