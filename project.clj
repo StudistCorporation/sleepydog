@@ -1,5 +1,5 @@
 (defproject jp.studist/sleepydog "0.1.0"
-  :description "FIXME: write description"
+  :description "Clojure library for tracing (possibly async) applications with Datadog."
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"
             :url "https://opensource.org/license/mit/"}
