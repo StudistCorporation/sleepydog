@@ -33,19 +33,19 @@
 (extend-protocol Tag
   String
   (add-tag!
-    [v ^MutableSpan span ^String k]
-    (.setTag span k v))
+   [v ^MutableSpan span ^String k]
+   (.setTag span k v))
   Boolean
   (add-tag!
-    [v ^MutableSpan span ^String k]
-    (.setTag span k v))
+   [v ^MutableSpan span ^String k]
+   (.setTag span k v))
   Number
   (add-tag!
-    [v ^MutableSpan span ^String k]
-    (.setTag span k v))
+   [v ^MutableSpan span ^String k]
+   (.setTag span k v))
   nil
   (add-tag!
-    [_ _ _]))
+   [_ _ _]))
 
 ;; agentが無効だとNoopSpanになるので何もしない実装も準備
 (defprotocol Span
@@ -55,21 +55,21 @@
 (extend-protocol Span
   MutableSpan
   (tag-span!
-    [span k v]
-    (add-tag! v span k))
+   [span k v]
+   (add-tag! v span k))
   (report-error!
-    [span ex]
-    (.setError span true)
+   [span ex]
+   (.setError span true)
    ;; MutableSpanで拾ってるが、OpenTracingのSpanのinterfaceも実装していてそっちのlogを使う
-    (.log ^io.opentracing.Span span (Collections/singletonMap Fields/ERROR_OBJECT ex))
-    (when-let [root (.getLocalRootSpan span)]
-      (.setError root true)))
+   (.log ^io.opentracing.Span span (Collections/singletonMap Fields/ERROR_OBJECT ex))
+   (when-let [root (.getLocalRootSpan span)]
+     (.setError root true)))
 
   NoopSpan
   (tag-span!
-    [_ _ _])
+   [_ _ _])
   (report-error!
-    [_ _]))
+   [_ _]))
 
 (defn set-resource!
   [^String reg-name]
@@ -84,19 +84,19 @@
 (extend-protocol Scope
   TraceScope
   (capture-scope
-    [scope]
-    (.captureConcurrent scope))
+   [scope]
+   (.captureConcurrent scope))
   (set-async!
-    [scope]
-    (doto scope (.setAsyncPropagation true)))
+   [scope]
+   (doto scope (.setAsyncPropagation true)))
 
   NoopScopeManager$NoopScope
   (capture-scope
-    [_]
-    nil)
+   [_]
+   nil)
   (set-async!
-    [scope]
-    scope))
+   [scope]
+   scope))
 
 (defprotocol DDHeaders
   (build-headers [span]))
@@ -104,18 +104,18 @@
 (extend-protocol DDHeaders
   io.opentracing.Span
   (build-headers
-    [span]
-    (let [context (.context span)]
+   [span]
+   (let [context (.context span)]
      ;; ローカル環境で観測したDD周りのヘダーを再現
-      {"x-datadog-sampling-priority" 1
-       "x-datadog-tags" "_dd.p.dm=-1"
-       "x-datadog-trace-id" (.toTraceId context)
-       "x-datadog-parent-id" (.toSpanId context)}))
+     {"x-datadog-sampling-priority" 1
+      "x-datadog-tags" "_dd.p.dm=-1"
+      "x-datadog-trace-id" (.toTraceId context)
+      "x-datadog-parent-id" (.toSpanId context)}))
 
   NoopSpan
   (build-headers
-    [_]
-    {}))
+   [_]
+   {}))
 
 (defprotocol AsyncCatchable
   (report-error [ex span]))
@@ -123,22 +123,21 @@
 (extend-protocol AsyncCatchable
   ExecutionException
   (report-error
-    [ex span]
-    (if-let [cause (.getCause ex)]
-      (do
-        (report-error! span cause)
-        (throw cause))
-      (throw ex)))
+   [ex span]
+   (if-let [cause (.getCause ex)]
+     (do
+       (report-error! span cause)
+       (throw cause))
+     (throw ex)))
 
   Throwable
   (report-error
-    [ex span]
-    (report-error! span ex)
-    (throw ex)))
+   [ex span]
+   (report-error! span ex)
+   (throw ex)))
 
 (defn build-error-reporter
   [span]
   (fn report-span-error
     [ex]
     (report-error ex span)))
-
