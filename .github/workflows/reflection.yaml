@@ -1,0 +1,18 @@
+name: lint
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: delaguardo/setup-clojure@12.1
+        with:
+          lein: 2.10.0
+
+      - name: Run check
+        run: lein check
