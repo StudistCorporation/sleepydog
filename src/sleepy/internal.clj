@@ -50,7 +50,6 @@
 (defn active-span!
   []
   (let [tracer (GlobalTracer/get)]
-    (when *continuation* (.activate *continuation*))
     (.activeSpan tracer)))
 
 ;; agentが無効だとNoopSpanになるので何もしない実装も準備
