@@ -1,4 +1,4 @@
-(defproject jp.studist/sleepydog "0.1.1"
+(defproject jp.studist/sleepydog "0.1.2"
   :description "Clojure library for tracing (possibly async) applications with Datadog."
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"
