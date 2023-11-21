@@ -125,6 +125,11 @@
   NoopSpan
   (build-headers
    [_]
+   {})
+
+  nil
+  (build-headers
+   [_]
    {}))
 
 (defprotocol AsyncCatchable
