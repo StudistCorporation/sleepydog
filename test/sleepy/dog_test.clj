@@ -33,8 +33,8 @@
     #_{:clj-kondo/ignore [:inline-def]}
     (defn-traced hoge
       []
-      42)
-    (is (= 42 (hoge)))))
+      {:value 42})
+    (is (= {:value 42} (hoge)))))
 
 (deftest with-tracing-test
   (testing "transparent"

@@ -89,7 +89,7 @@
              (cond
                (vector? head)
                (let [body (rest code)]
-                 (if (map? (first body))
+                 (if (and (map? (first body)) (not-empty (rest body)))
                    (conj aggr head (first body)
                          (concat (list `with-tracing fname) (rest body)))
                    (conj aggr head (concat (list `with-tracing fname) body))))
@@ -101,7 +101,7 @@
                   (rest code)
                   (conj
                    aggr
-                   (if (map? (first body))
+                   (if (and (map? (first body)) (not-empty (rest body)))
                      (list args (first body)
                            (concat (list `with-tracing fname) (rest body)))
                      (list args (concat (list `with-tracing fname) body))))))
