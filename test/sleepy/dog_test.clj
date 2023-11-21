@@ -1,11 +1,10 @@
 (ns sleepy.dog-test
   (:require [clojure.test :refer [deftest is testing]]
-            [sleepy.dog :refer [defn-traced
-                                ;; http-headers
-                                ;; set-resource!
-                                with-tracing
-                                ;; wrap-ring-trace
-                                ]]))
+            [sleepy.dog :as datadog :refer [defn-traced
+                                            http-headers
+                                            with-tracing
+                                            ;; wrap-ring-trace
+                                            ]]))
 
 (deftest defn-traced-test
   (testing "macro expansion"
@@ -47,3 +46,12 @@
     (is (thrown? RuntimeException (with-tracing "async-throw-test"
                                     @(future
                                        (throw (RuntimeException. "foo"))))))))
+
+(deftest http-headers-test
+  (let [headers (http-headers)]
+    (testing "trace-id inclusion"
+      (let [trace (some-> (datadog/active-span!) (.context) (.toTraceId) (not-empty))]
+        (is (= trace (get "x-datadog-trace-id" headers)))))
+    (testing "parent-id inclusion"
+      (let [trace (some-> (datadog/active-span!) (.context) (.toSpanId) (not-empty))]
+        (is (= trace (get "x-datadog-parent-id" headers)))))))
