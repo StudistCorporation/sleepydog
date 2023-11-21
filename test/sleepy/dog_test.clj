@@ -36,3 +36,14 @@
       []
       42)
     (is (= 42 (hoge)))))
+
+(deftest with-tracing-test
+  (testing "transparent"
+    (is (= 42 (with-tracing "addition-test"
+                (+ 1 41)))))
+  (testing "unpacks ExecutionException"
+    ;; exceptions are wrapped ExecutionException when thrown through a future
+    ;; with-tracing unpacks those
+    (is (thrown? RuntimeException (with-tracing "async-throw-test"
+                                    @(future
+                                       (throw (RuntimeException. "foo"))))))))
