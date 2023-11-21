@@ -9,7 +9,7 @@ Clojure library for tracing (possibly async) applications with Datadog.
 Available on Clojars.
 
 ```
-[jp.studist/sleepydog "0.1.0"]
+[jp.studist/sleepydog "0.1.1"]
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ A ring middleware that automatically instruments server requests.
 
 A macro that instruments the given body as a span labelled as operation "op-name".
 
-### `set-resource!` 
+### `set-resource!`
 
 Sets the resource (subject) of the current span's operation.
 
