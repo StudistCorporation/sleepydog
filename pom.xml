@@ -4,7 +4,7 @@
   <groupId>jp.studist</groupId>
   <artifactId>sleepydog</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <name>sleepydog</name>
   <description>Clojure library for tracing (possibly async) applications with Datadog.</description>
   <url>https://github.com/StudistCorporation/sleepydog</url>
@@ -18,7 +18,7 @@
     <url>https://github.com/StudistCorporation/sleepydog</url>
     <connection>scm:git:git://github.com/StudistCorporation/sleepydog.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/StudistCorporation/sleepydog.git</developerConnection>
-    <tag>v0.1.2</tag>
+    <tag>v0.1.3</tag>
   </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
