@@ -1,4 +1,4 @@
-(defproject jp.studist/sleepydog "0.2.0-alpha2"
+(defproject jp.studist/sleepydog "0.2.0"
   :description "Clojure library for tracing (possibly async) applications with Datadog."
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"
@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.11.2"]
                  [com.datadoghq/dd-trace-ot "1.31.2"]]
   :scm {:name "git"
-        :tag "v0.2.0-alpha2"}
+        :tag "v0.2.0"}
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
