@@ -71,7 +71,7 @@
     <dependency>
       <groupId>com.datadoghq</groupId>
       <artifactId>dd-trace-ot</artifactId>
-      <version>1.24.2</version>
+      <version>1.31.2</version>
     </dependency>
     <dependency>
       <groupId>clj-kondo</groupId>
