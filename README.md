@@ -9,7 +9,7 @@ Clojure library for tracing (possibly async) applications with Datadog.
 Available on Clojars.
 
 ```
-[jp.studist/sleepydog "0.1.3"]
+[jp.studist/sleepydog "0.1.4"]
 ```
 
 ## Usage
