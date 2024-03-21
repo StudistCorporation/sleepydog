@@ -18,7 +18,7 @@
     <url>https://github.com/StudistCorporation/sleepydog</url>
     <connection>scm:git:git://github.com/StudistCorporation/sleepydog.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/StudistCorporation/sleepydog.git</developerConnection>
-    <tag>981903466a9450917e4aacde00128bd982166486</tag>
+    <tag>latest</tag>
   </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>

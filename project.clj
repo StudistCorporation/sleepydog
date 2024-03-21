@@ -5,11 +5,15 @@
             :url "https://opensource.org/license/mit/"}
   :dependencies [[org.clojure/clojure "1.11.2"]
                  [com.datadoghq/dd-trace-ot "1.31.2"]]
+  :scm {:name "git"
+        :tag "latest"}
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
   :profiles
-  {:dev {:dependencies [[clj-kondo "2023.10.20"]
+  {:uberjar {:scm {:name "git"
+                   :tag "v0.1.3"}}
+   :dev {:dependencies [[clj-kondo "2023.10.20"]
                         [lambdaisland/kaocha "1.87.1366"]]
          :plugins [[lein-ancient "0.7.0"]]
          :aliases {"lint" ["run" "-m" "clj-kondo.main"
