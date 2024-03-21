@@ -8,7 +8,7 @@ Clojure library for tracing (possibly async) applications with Datadog.
 
 Available on Clojars.
 
-```
+```clj
 [jp.studist/sleepydog "0.2.0"]
 ```
 
@@ -69,6 +69,6 @@ If you want to mark an entire request as "errored", then combine this with `root
         {:status 500 :body (.getMessage ex)}))))
 ```
 
-### Tracing carmine
+### Tracing Carmine
 
-You can enable tracing for the [carmine Redis library](https://github.com/taoensso/carmine) by using `sleepy.dog.carmine/trace-carmine!`. The traces will be reported mimicking the way how Datadog auto-instruments Jedis or the Ruby redis gem.
+You can enable tracing for the [Carmine Redis library](https://github.com/taoensso/carmine) by using `sleepy.dog.carmine/trace-carmine!`. The traces will be reported mimicking the way how Datadog auto-instruments Jedis or the Ruby redis gem.
