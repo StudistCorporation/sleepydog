@@ -22,7 +22,7 @@
          [original-fn]
          ;; tag functions as already-traced so this becomes idempotent and reload-friendly
          (let [old-meta (meta original-fn)]
-           (when-not (:sleepy.dog/traced? old-meta)
+           (if-not (:sleepy.dog/traced? old-meta)
              (with-meta
                (fn [& args]
                  (with-tracing "redis.command"
@@ -32,4 +32,5 @@
                      (datadog/tag-span! span "db.operation" op)
                      (datadog/tag-span! span "db.system" "redis"))
                    (apply original-fn args)))
-               (assoc old-meta :sleepy.dog/traced? true)))))))))
+               (assoc old-meta :sleepy.dog/traced? true))
+             original-fn)))))))
