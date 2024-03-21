@@ -12,7 +12,8 @@
                                    :password :env/clojars_token}}
   :profiles
   {:dev {:dependencies [[clj-kondo "2023.10.20"]
-                        [lambdaisland/kaocha "1.87.1366"]]
+                        [lambdaisland/kaocha "1.87.1366"]
+                        [com.taoensso/carmine "3.3.2"]]
          :plugins [[lein-ancient "0.7.0"]]
          :aliases {"lint" ["run" "-m" "clj-kondo.main"
                            "--config" ".clj-kondo/config.edn"

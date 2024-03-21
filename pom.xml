@@ -85,6 +85,12 @@
       <version>1.87.1366</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.taoensso</groupId>
+      <artifactId>carmine</artifactId>
+      <version>3.3.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
 
