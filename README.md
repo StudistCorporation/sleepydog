@@ -68,3 +68,7 @@ If you want to mark an entire request as "errored", then combine this with `root
             (datadog/report-error! root ex)))
         {:status 500 :body (.getMessage ex)}))))
 ```
+
+### Tracing carmine
+
+You can enable tracing for the carmine Redis library by using `sleepy.dog.carmine/trace-carmine!`. The traces will be reported mimicking the way how Datadog auto-instruments Jedis or the Ruby redis gem.
