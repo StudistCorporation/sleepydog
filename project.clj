@@ -1,4 +1,4 @@
-(defproject jp.studist/sleepydog "0.1.3"
+(defproject jp.studist/sleepydog "0.1.4"
   :description "Clojure library for tracing (possibly async) applications with Datadog."
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"
@@ -6,14 +6,12 @@
   :dependencies [[org.clojure/clojure "1.11.2"]
                  [com.datadoghq/dd-trace-ot "1.31.2"]]
   :scm {:name "git"
-        :tag "latest"}
+        :tag "v0.1.4"}
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
   :profiles
-  {:uberjar {:scm {:name "git"
-                   :tag "v0.1.3"}}
-   :dev {:dependencies [[clj-kondo "2023.10.20"]
+  {:dev {:dependencies [[clj-kondo "2023.10.20"]
                         [lambdaisland/kaocha "1.87.1366"]]
          :plugins [[lein-ancient "0.7.0"]]
          :aliases {"lint" ["run" "-m" "clj-kondo.main"
