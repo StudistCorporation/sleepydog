@@ -65,7 +65,7 @@
   [handler]
   (fn ring-trace-wrapper
     [{:keys [remote-addr request-method uri]
-      {:strs [content-length user-agent x-forwarded-for]} :headers
+      {:strs [content-length user-agent x-forwarded-for referer]} :headers
       :as request}]
     (with-tracing "ring.request"
       (let [span (active-span!)]
@@ -75,6 +75,8 @@
         (datadog/tag-span! span "http.useragent" user-agent)
         (datadog/tag-span! span "http.request.content_length" content-length)
         (datadog/tag-span! span "network.client.ip" (or x-forwarded-for remote-addr))
+        (when referer
+          (datadog/tag-span! span "http.referer" referer))
         (let [result (handler request)]
           (datadog/tag-span! span "http.status_code" (:status result))
           result)))))
