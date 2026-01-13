@@ -3,17 +3,17 @@
   :url "https://github.com/StudistCorporation/sleepydog"
   :license {:name "MIT"
             :url "https://opensource.org/license/mit/"}
-  :dependencies [[org.clojure/clojure "1.11.2"]
-                 [com.datadoghq/dd-trace-ot "1.31.2"]]
+  :dependencies [[org.clojure/clojure "1.12.4"]
+                 [com.datadoghq/dd-trace-ot "1.58.0"]]
   :scm {:name "git"
         :tag "v0.2.0"}
   :deploy-repositories {"clojars" {:url "https://repo.clojars.org/"
                                    :username :env/clojars_user
                                    :password :env/clojars_token}}
   :profiles
-  {:dev {:dependencies [[clj-kondo "2023.10.20"]
-                        [lambdaisland/kaocha "1.87.1366"]
-                        [com.taoensso/carmine "3.3.2"]]
+  {:dev {:dependencies [[clj-kondo "2026.01.12"]
+                        [lambdaisland/kaocha "1.91.1392"]
+                        [com.taoensso/carmine "3.5.0"]]
          :plugins [[lein-ancient "0.7.0"]]
          :aliases {"lint" ["run" "-m" "clj-kondo.main"
                            "--config" ".clj-kondo/config.edn"
