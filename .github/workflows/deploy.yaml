@@ -12,12 +12,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: crazy-max/ghaction-import-gpg@v5
         with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY_NEW }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE_NEW }}
       - uses: delaguardo/setup-clojure@12.1
         with:
           lein: 2.10.0
       - run: lein deploy clojars
         env:
-          CLOJARS_USER: valerauko
-          CLOJARS_TOKEN: ${{ secrets.CLOJARS_TOKEN }}
+          CLOJARS_USER: ${{ vars.CLOJARS_USER }}
+          CLOJARS_TOKEN: ${{ secrets.CLOJARS_TOKEN_NEW }}
+          LEIN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE_NEW }}
