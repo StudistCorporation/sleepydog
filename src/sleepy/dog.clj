@@ -18,6 +18,10 @@
   [reg-name]
   (datadog/set-resource! reg-name))
 
+(defn tag-span!
+  [span k v]
+  (datadog/tag-span! span k v))
+
 (defn report-error!
   [span ex]
   (datadog/report-error! span ex))
