@@ -48,6 +48,16 @@ Utility function that builds Datadog headers for distributed tracing. By adding 
 (merge (datadog/http-headers) headers)
 ```
 
+### `tag-span!`
+
+Adds a custom tag to a span. Accepts String, Boolean, Number, or nil values.
+
+```clj
+(let [span (datadog/active-span!)]
+  (datadog/tag-span! span "user.id" user-id)
+  (datadog/tag-span! span "feature.enabled" true))
+```
+
 ### `report-error!`
 
 Used to manually report caught exceptions (without relying on the automatic reporting from `with-tracing` or `defn-traced`). This can be useful for example in a Ring handler that catches all escaped exceptions and responds with a well-formed 500 error.
