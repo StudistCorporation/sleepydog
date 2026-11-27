@@ -24,6 +24,12 @@ A drop-in replacement for Clojure's `defn` that instruments the function in ques
 
 A ring middleware that automatically instruments server requests.
 
+The span continues the trace context carried by the request headers (Datadog headers and W3C `traceparent`, as the
+agent's propagation styles configure), so a caller's trace and this service's spans form one distributed trace.
+How the incoming context is used is the agent's setting `DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT`
+(`continue` by default). Public-facing services that receive untrusted headers should set `restart`, which starts a
+new trace and keeps the incoming context as a span link.
+
 ### `with-tracing "op-name"`
 
 A macro that instruments the given body as a span labelled as operation "op-name".

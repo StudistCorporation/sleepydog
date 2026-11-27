@@ -3,8 +3,7 @@
             [sleepy.dog :as datadog :refer [defn-traced
                                             http-headers
                                             with-tracing
-                                            ;; wrap-ring-trace
-                                            ]]))
+                                            wrap-ring-trace]]))
 
 (deftest defn-traced-test
   (testing "macro expansion"
@@ -55,3 +54,27 @@
     (testing "parent-id inclusion"
       (let [trace (some-> (datadog/active-span!) (.context) (.toSpanId) (not-empty))]
         (is (= trace (get "x-datadog-parent-id" headers)))))))
+
+(defn- trace-id-seen-by-handler
+  "要求を wrap-ring-trace に通し、handler の中の span が外へ送る trace の ID。"
+  [headers]
+  (let [seen (atom nil)
+        handler (wrap-ring-trace (fn [_]
+                                   (reset! seen (get (http-headers) "x-datadog-trace-id"))
+                                   {:status 200}))]
+    (handler {:request-method :get :uri "/" :remote-addr "127.0.0.1" :headers headers})
+    @seen))
+
+(deftest wrap-ring-trace-test
+  (testing "transparent"
+    (is (= {:status 200} ((wrap-ring-trace (constantly {:status 200}))
+                          {:request-method :get :uri "/" :remote-addr "127.0.0.1" :headers {}}))))
+  ;; agent が無いと span は何もしない実装になり、trace の ID も無い
+  (when (seq (with-tracing "probe" (http-headers)))
+    (testing "continues the trace that the caller sent"
+      (is (= "1234567890" (trace-id-seen-by-handler {"x-datadog-trace-id" "1234567890" "x-datadog-parent-id" "987654321"})))
+      (is (= (str (Long/parseLong "00f067aa0ba902b7" 16))
+             (trace-id-seen-by-handler {"traceparent" "00-4bf92f3577b34da600f067aa0ba902b7-00f067aa0ba902b7-01"}))
+          "W3C traceparent (the lower 64 bits of the trace id)"))
+    (testing "starts a new trace without incoming context"
+      (is (not= "1234567890" (trace-id-seen-by-handler {}))))))
