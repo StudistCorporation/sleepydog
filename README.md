@@ -24,6 +24,14 @@ A drop-in replacement for Clojure's `defn` that instruments the function in ques
 
 A ring middleware that automatically instruments server requests.
 
+Pass `{:continue-trace? true}` to continue the trace context in the request headers (in the propagation styles the
+agent extracts, Datadog and W3C `traceparent` by default).
+Enable it only for trusted callers, since headers from the internet can be forged.
+
+```clj
+(wrap-ring-trace handler {:continue-trace? true})
+```
+
 ### `with-tracing "op-name"`
 
 A macro that instruments the given body as a span labelled as operation "op-name".

@@ -8,6 +8,9 @@
             TraceScope$Continuation]
            [io.opentracing.log
             Fields]
+           [io.opentracing.propagation
+            Format$Builtin
+            TextMapAdapter]
            [io.opentracing.noop
             NoopSpan
             NoopScopeManager$NoopScope]
@@ -130,6 +133,10 @@
   (build-headers
    [_]
    {}))
+
+(defn extract-context
+  [headers]
+  (.extract (GlobalTracer/get) Format$Builtin/HTTP_HEADERS (TextMapAdapter. ^java.util.Map headers)))
 
 (defprotocol AsyncCatchable
   (report-error [ex span]))

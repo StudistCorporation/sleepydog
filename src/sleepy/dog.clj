@@ -35,12 +35,14 @@
   (let [span (active-span!)]
     (datadog/build-headers span)))
 
-(defmacro with-tracing
-  [op & body]
-  `(let [inherited-scope# (when *continuation* (.activate *continuation*))
+(defmacro with-tracing*
+  [op parent & body]
+  `(let [parent# ~parent
+         inherited-scope# (when *continuation* (.activate *continuation*))
          tracer# (GlobalTracer/get)
          span# (-> (.buildSpan tracer# ~op)
                    (.withTag DDTags/LANGUAGE_TAG_KEY "clojure")
+                   (cond-> parent# (.asChildOf ^io.opentracing.SpanContext parent#))
                    (.start))
          scope# (datadog/set-async! (.activateSpan tracer# span#))
          report!# (datadog/build-error-reporter span#)]
@@ -65,13 +67,17 @@
          (.close scope#)
          (when inherited-scope# (.close inherited-scope#))))))
 
+(defmacro with-tracing
+  [op & body]
+  `(with-tracing* ~op nil ~@body))
+
 (defn wrap-ring-trace
-  [handler]
+  [handler & [{:keys [continue-trace?]}]]
   (fn ring-trace-wrapper
-    [{:keys [remote-addr request-method uri]
+    [{:keys [remote-addr request-method uri headers]
       {:strs [content-length user-agent x-forwarded-for referer]} :headers
       :as request}]
-    (with-tracing "ring.request"
+    (with-tracing* "ring.request" (when continue-trace? (datadog/extract-context headers))
       (let [span (active-span!)]
         ;; https://docs.datadoghq.com/tracing/trace_collection/tracing_naming_convention/#http-requests
         (datadog/tag-span! span "http.method" (name request-method))
