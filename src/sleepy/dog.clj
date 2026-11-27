@@ -36,9 +36,10 @@
 (defmacro with-tracing*
   "Like `with-tracing`, with the span's parent context (nil for the active span)."
   [op parent & body]
-  `(let [inherited-scope# (when *continuation* (.activate *continuation*))
+  `(let [parent# ~parent
+         inherited-scope# (when *continuation* (.activate *continuation*))
          tracer# (GlobalTracer/get)
-         span# (datadog/start-span tracer# ~op ~parent)
+         span# (datadog/start-span tracer# ~op parent#)
          scope# (datadog/set-async! (.activateSpan tracer# span#))
          report!# (datadog/build-error-reporter span#)]
      (try
@@ -67,16 +68,20 @@
   `(with-tracing* ~op nil ~@body))
 
 (defn wrap-ring-trace
-  "Traces each request as a ring.request span that continues the trace context carried by the request headers, so a
-   caller's trace (e.g. one that sent `http-headers`) and this service form one trace. For public-facing services,
-   set `DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT=restart` on the agent to start a new trace and keep the incoming
-   context as a span link."
-  [handler]
-  (fn ring-trace-wrapper
-    [{:keys [remote-addr request-method uri headers]
-      {:strs [content-length user-agent x-forwarded-for referer]} :headers
-      :as request}]
-    (with-tracing* "ring.request" (datadog/extract-context headers)
+  "Traces each request as a ring.request span.
+
+   With `{:continue-trace? true}`, the span continues the trace context carried by the request headers, so a caller's
+   trace (e.g. one that sent `http-headers`) and this service form one trace. Enable it only where callers are
+   trusted: a forged header could otherwise force sampling or join another trace. The agent's
+   `DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT` still applies (`restart` keeps the incoming context as a span link only)."
+  ([handler]
+   (wrap-ring-trace handler {}))
+  ([handler {:keys [continue-trace?]}]
+   (fn ring-trace-wrapper
+     [{:keys [remote-addr request-method uri headers]
+       {:strs [content-length user-agent x-forwarded-for referer]} :headers
+       :as request}]
+     (with-tracing* "ring.request" (when continue-trace? (datadog/extract-context headers))
       (let [span (active-span!)]
         ;; https://docs.datadoghq.com/tracing/trace_collection/tracing_naming_convention/#http-requests
         (datadog/tag-span! span "http.method" (name request-method))
@@ -88,7 +93,7 @@
           (datadog/tag-span! span "http.referer" referer))
         (let [result (handler request)]
           (datadog/tag-span! span "http.status_code" (:status result))
-          result)))))
+          result))))))
 
 (defmacro defn-traced
   [reg-name & code]

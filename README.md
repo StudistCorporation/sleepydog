@@ -24,11 +24,18 @@ A drop-in replacement for Clojure's `defn` that instruments the function in ques
 
 A ring middleware that automatically instruments server requests.
 
-The span continues the trace context carried by the request headers (Datadog headers and W3C `traceparent`, as the
-agent's propagation styles configure), so a caller's trace and this service's spans form one distributed trace.
-How the incoming context is used is the agent's setting `DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT`
-(`continue` by default). Public-facing services that receive untrusted headers should set `restart`, which starts a
-new trace and keeps the incoming context as a span link.
+Each request starts a new trace. To continue the trace context that callers send (Datadog headers and W3C
+`traceparent`, as the agent's propagation styles configure), pass `{:continue-trace? true}`:
+
+```clj
+(wrap-ring-trace handler {:continue-trace? true})
+;; reitit
+{:middleware [[datadog/wrap-ring-trace {:continue-trace? true}]]}
+```
+
+Enable it only for servers whose callers are trusted (e.g. internal services). Headers from the internet can be
+forged to force sampling or to join another trace. The agent's `DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT` still
+decides how the extracted context is used (`restart` keeps it as a span link only).
 
 ### `with-tracing "op-name"`
 
