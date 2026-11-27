@@ -6,9 +6,6 @@
            [datadog.trace.context
             TraceScope
             TraceScope$Continuation]
-           [io.opentracing
-            SpanContext
-            Tracer]
            [io.opentracing.log
             Fields]
            [io.opentracing.propagation
@@ -52,23 +49,6 @@
   nil
   (add-tag!
    [_ _ _]))
-
-(defn extract-context
-  "The trace context carried by request headers (Datadog headers, W3C traceparent, ... as the agent's propagation
-   styles configure), or nil. Whether a span continues it or restarts is decided by the agent when the span starts
-   (`DD_TRACE_PROPAGATION_BEHAVIOR_EXTRACT`)."
-  ^SpanContext [headers]
-  (let [^Tracer tracer (GlobalTracer/get)]
-    (.extract tracer Format$Builtin/HTTP_HEADERS
-              (TextMapAdapter. ^java.util.Map (into {} (map (fn [[k v]] [(str k) (str v)])) headers)))))
-
-(defn start-span
-  "Starts an `op` span as a child of `parent` (an extracted context) when given, otherwise of the active span."
-  ^io.opentracing.Span [^Tracer tracer ^String op ^SpanContext parent]
-  (-> (.buildSpan tracer op)
-      (.withTag DDTags/LANGUAGE_TAG_KEY "clojure")
-      (cond-> parent (.asChildOf parent))
-      (.start)))
 
 (defn active-span!
   []
@@ -153,6 +133,10 @@
   (build-headers
    [_]
    {}))
+
+(defn extract-context
+  [headers]
+  (.extract (GlobalTracer/get) Format$Builtin/HTTP_HEADERS (TextMapAdapter. ^java.util.Map headers)))
 
 (defprotocol AsyncCatchable
   (report-error [ex span]))
